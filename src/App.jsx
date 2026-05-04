@@ -9,7 +9,7 @@ import { ToastContainer } from './components/ui/Toast'
 // Auth (pequenas, carregadas imediatamente)
 import Login from './pages/auth/Login'
 import PreCadastro from './pages/auth/PreCadastro'
-import CriarSenha from './pages/auth/CriarSenha'
+import PrimeiroAcesso from './pages/auth/PrimeiroAcesso'
 
 // Layouts (necessários para suas rotas, lazy)
 const AdminLayout = lazy(() => import('./components/layout/AdminLayout'))
@@ -30,6 +30,7 @@ const MembroCarteiraDigital = lazy(() => import('./pages/membro/CarteiraDigital'
 const MembroOfertas = lazy(() => import('./pages/membro/Ofertas'))
 const MembroNotificacoes = lazy(() => import('./pages/membro/Notificacoes'))
 const MembroPerfil = lazy(() => import('./pages/membro/Perfil'))
+const MembroAniversariantes = lazy(() => import('./pages/membro/Aniversariantes'))
 
 const ROLES_ADMIN = ['super_admin', 'admin', 'lideranca']
 
@@ -42,7 +43,7 @@ function AppRoutes() {
         {/* Público */}
         <Route path="/login" element={<Login />} />
         <Route path="/pre-cadastro" element={<PreCadastro />} />
-        <Route path="/criar-senha" element={<CriarSenha />} />
+        <Route path="/primeiro-acesso" element={<PrimeiroAcesso />} />
 
         {/* Admin */}
         <Route
@@ -76,6 +77,7 @@ function AppRoutes() {
           <Route path="ofertas" element={<MembroOfertas />} />
           <Route path="notificacoes" element={<MembroNotificacoes />} />
           <Route path="perfil" element={<MembroPerfil />} />
+          <Route path="aniversariantes" element={<MembroAniversariantes />} />
         </Route>
 
         <Route path="/" element={<Navigate to="/login" replace />} />

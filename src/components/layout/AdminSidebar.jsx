@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Users, Calendar, QrCode,
-  Settings, Gift, LogOut, ChevronRight, UserCircle,
+  Settings, Gift, LogOut, ChevronRight, UserCircle, Download,
 } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
+import { usePWAInstall } from '../../hooks/usePWAInstall'
 import Avatar from '../ui/Avatar'
 
 const ROLES_DUPLO_ACESSO = ['super_admin', 'admin', 'lideranca']
@@ -21,6 +23,8 @@ export default function AdminSidebar() {
   const { membro, signOut } = useAuth()
   const navigate = useNavigate()
   const temDuploAcesso = ROLES_DUPLO_ACESSO.includes(membro?.role)
+  const { podeInstalar, instalado, instalar, isIOS, isStandalone } = usePWAInstall()
+  const [mostrarDicaIOS, setMostrarDicaIOS] = useState(false)
 
   return (
     <aside className="w-64 shrink-0 bg-gradient-to-b from-blue-950 to-blue-900 min-h-svh flex flex-col">
@@ -84,6 +88,39 @@ export default function AdminSidebar() {
             Ver como membro
           </button>
         )}
+        {/* Botão instalar PWA — Android/Chrome */}
+        {podeInstalar && !instalado && (
+          <button
+            onClick={instalar}
+            className="w-full flex items-center gap-2 px-3 py-2 mb-1 text-emerald-300 hover:text-emerald-100 border border-emerald-700/40 hover:border-emerald-500/60 hover:bg-white/8 rounded-xl text-sm font-medium transition-colors"
+          >
+            <Download size={16} />
+            Instalar App
+          </button>
+        )}
+
+        {/* Botão instalar PWA — iOS */}
+        {isIOS && !isStandalone && !instalado && (
+          <div className="mb-1">
+            <button
+              onClick={() => setMostrarDicaIOS(v => !v)}
+              className="w-full flex items-center gap-2 px-3 py-2 text-emerald-300 hover:text-emerald-100 border border-emerald-700/40 hover:border-emerald-500/60 hover:bg-white/8 rounded-xl text-sm font-medium transition-colors"
+            >
+              <Download size={16} />
+              Instalar App
+            </button>
+            {mostrarDicaIOS && (
+              <div className="mt-1 mx-1 px-3 py-2 bg-white/8 border border-emerald-700/30 rounded-xl text-xs text-emerald-200 leading-relaxed">
+                Toque em <strong>Compartilhar</strong> (□↑) e selecione <strong>"Adicionar à Tela de Início"</strong>
+              </div>
+            )}
+          </div>
+        )}
+
+        {instalado && (
+          <p className="text-xs text-emerald-400 text-center px-3 py-2">✓ App instalado</p>
+        )}
+
         <button
           onClick={signOut}
           className="w-full flex items-center gap-2 px-3 py-2 text-blue-200 hover:text-white hover:bg-white/8 rounded-xl text-sm transition-colors"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Calendar, Bell, Gift, ChevronRight, X } from 'lucide-react'
+import { Calendar, Bell, Gift, ChevronRight, X, Building2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Card from '../../components/ui/Card'
 import Avatar from '../../components/ui/Avatar'
@@ -30,18 +30,22 @@ export default function MembroDashboard() {
     })
   }, [membro?.igreja_id])
 
-  const hora = new Date().getHours()
-  const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite'
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Avatar nome={membro?.nome_completo} fotoUrl={membro?.foto_url} size="lg" />
+        {membro?.igrejas?.logo_url ? (
+          <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center shrink-0 overflow-hidden">
+            <img src={membro.igrejas.logo_url} alt="Logo" className="w-full h-full object-contain" />
+          </div>
+        ) : (
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-900 to-purple-700 flex items-center justify-center shrink-0 shadow-sm">
+            <Building2 size={22} className="text-white" />
+          </div>
+        )}
         <div>
-          <p className="text-gray-500 text-sm">{saudacao}!</p>
-          <h1 className="text-xl font-bold text-gray-900">{membro?.nome_completo?.split(' ')[0]}</h1>
-          <p className="text-xs text-gray-400 capitalize">{membro?.role} · {membro?.igrejas?.nome}</p>
+          <p className="text-base font-bold text-gray-900 leading-tight">{membro?.igrejas?.nome ?? 'Minha Igreja'}</p>
+          <p className="text-xs text-gray-400 mt-0.5">{membro?.nome_completo} · <span className="capitalize">{membro?.role}</span></p>
         </div>
       </div>
 

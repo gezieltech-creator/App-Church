@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { Eye, EyeOff, LogIn } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { PageLoader } from '../../components/ui/LoadingSpinner'
@@ -8,12 +8,14 @@ const ROLES_ADMIN = ['admin', 'super_admin', 'lideranca']
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { signIn, membro, loading: authLoading } = useAuth()
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
+  const mensagemInfo = location.state?.mensagem ?? ''
 
   // Redirecionar assim que membro ativo for carregado
   useEffect(() => {
@@ -78,6 +80,12 @@ export default function Login() {
         <h2 className="text-2xl font-bold text-gray-900 mb-1">Entrar na conta</h2>
         <p className="text-gray-500 text-sm mb-8">Use o e-mail e senha cadastrados.</p>
 
+        {mensagemInfo && (
+          <div className="mb-4 px-4 py-3 bg-blue-50 border border-blue-100 rounded-xl text-sm text-blue-700">
+            {mensagemInfo}
+          </div>
+        )}
+
         {erro && (
           <div className="mb-4 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
             {erro}
@@ -133,12 +141,14 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="mt-6 text-sm text-gray-500 text-center">
-          Não tem conta?{' '}
-          <Link to="/pre-cadastro" className="text-blue-700 font-medium hover:underline">
-            Fazer pré-cadastro
-          </Link>
-        </p>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-500">
+            Primeiro acesso?{' '}
+            <Link to="/primeiro-acesso" className="text-blue-700 font-medium hover:underline">
+              Criar minha conta
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
